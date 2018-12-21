@@ -1,6 +1,5 @@
 import os
 import tarfile
-
 from pathlib import Path
 import requests
 from tqdm import tqdm
@@ -55,6 +54,10 @@ if not os.path.exists(image_net_image_dir):
 def download_wid2urls_file():
     print('Downloading Image Net WID -> Image Urls Mappings file...')
     r = requests.get(wids_url, stream=True)
+    assert r.status_code == 200 , f"{r.status_code}"
+    print("#####")
+    print(r.headers)
+    print("#####")
     with open(image_net_urls_file, 'wb') as f:
         total_length = int(r.headers.get('content-length'))
         for chunk in tqdm(r.iter_content(chunk_size=1024), total=(total_length / 1024) + 1, unit='KB'):
@@ -168,3 +171,10 @@ print('There are {} images downloaded.'.format(len(os.listdir(image_net_image_di
 
 for filename in os.listdir(image_net_image_dir):
     pass
+
+
+# def main():
+#     pass
+
+# if __name__ == '__main__':
+#     main()
